@@ -2,7 +2,7 @@
 
 ## Reporting Issues
 
-Before creating a new Issue, please check first if a similar Issue [already exists](https://github.com/go-sql-driver/mysql/issues?state=open) or was [recently closed](https://github.com/go-sql-driver/mysql/issues?direction=desc&page=1&sort=updated&state=closed).
+Before creating a new Issue, please check first if a similar Issue [already exists](https://github.com/jslyzt/mysql/issues?state=open) or was [recently closed](https://github.com/jslyzt/mysql/issues?direction=desc&page=1&sort=updated&state=closed).
 
 ## Contributing Code
 
@@ -20,4 +20,4 @@ Before merging the Pull Request, at least one [team member](https://github.com/g
 
 ## Development Ideas
 
-If you are looking for ideas for code contributions, please check our [Development Ideas](https://github.com/go-sql-driver/mysql/wiki/Development-Ideas) Wiki page.
+If you are looking for ideas for code contributions, please check our [Development Ideas](https://github.com/jslyzt/mysql/wiki/Development-Ideas) Wiki page.

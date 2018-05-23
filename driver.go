@@ -9,11 +9,11 @@
 // The driver should be used via the database/sql package:
 //
 //  import "database/sql"
-//  import _ "github.com/go-sql-driver/mysql"
+//  import _ "github.com/jslyzt/mysql"
 //
 //  db, err := sql.Open("mysql", "user:password@/dbname")
 //
-// See https://github.com/go-sql-driver/mysql#usage for details
+// See https://github.com/jslyzt/mysql#usage for details
 package mysql
 
 import (
@@ -28,9 +28,9 @@ type watcher interface {
 	startWatcher()
 }
 
-// MySQLDriver is exported to make the driver directly accessible.
+// MSQLDriver is exported to make the driver directly accessible.
 // In general the driver is used via the database/sql package.
-type MySQLDriver struct{}
+type MSQLDriver struct{}
 
 // DialFunc is a function which can be used to establish the network connection.
 // Custom dial functions must be registered with RegisterDial
@@ -54,9 +54,9 @@ func RegisterDial(net string, dial DialFunc) {
 }
 
 // Open new Connection.
-// See https://github.com/go-sql-driver/mysql#dsn-data-source-name for how
+// See https://github.com/jslyzt/mysql#dsn-data-source-name for how
 // the DSN string is formated
-func (d MySQLDriver) Open(dsn string) (driver.Conn, error) {
+func (d MSQLDriver) Open(dsn string) (driver.Conn, error) {
 	var err error
 
 	// New mysqlConn
@@ -188,7 +188,7 @@ func handleAuthResult(mc *mysqlConn, oldCipher []byte, pluginName string) error 
 	if mc.cfg.AllowOldPasswords && err == ErrOldPassword {
 		// Retry with old authentication method. Note: there are edge cases
 		// where this should work but doesn't; this is currently "wontfix":
-		// https://github.com/go-sql-driver/mysql/issues/184
+		// https://github.com/jslyzt/mysql/issues/184
 
 		// If CLIENT_PLUGIN_AUTH capability is not supported, no new cipher is
 		// sent and we have to keep using the cipher sent in the init packet.
@@ -218,5 +218,5 @@ func handleAuthResult(mc *mysqlConn, oldCipher []byte, pluginName string) error 
 }
 
 func init() {
-	sql.Register("mysql", &MySQLDriver{})
+	sql.Register("mysql", &MSQLDriver{})
 }

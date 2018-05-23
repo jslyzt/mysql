@@ -2,7 +2,7 @@
 
 A MySQL-Driver for Go's [database/sql](https://golang.org/pkg/database/sql/) package
 
-![Go-MySQL-Driver logo](https://raw.github.com/wiki/go-sql-driver/mysql/gomysql_m.png "Golang Gopher holding the MySQL Dolphin")
+![Go-MySQL-Driver logo](https://raw.github.com/wiki/jslyzt/mysql/gomysql_m.png "Golang Gopher holding the MySQL Dolphin")
 
 ---------------------------------------
   * [Features](#features)
@@ -29,7 +29,7 @@ A MySQL-Driver for Go's [database/sql](https://golang.org/pkg/database/sql/) pac
 ## Features
   * Lightweight and [fast](https://github.com/go-sql-driver/sql-benchmark "golang MySQL-Driver performance")
   * Native Go implementation. No C-bindings, just pure Go
-  * Connections over TCP/IPv4, TCP/IPv6, Unix domain sockets or [custom protocols](https://godoc.org/github.com/go-sql-driver/mysql#DialFunc)
+  * Connections over TCP/IPv4, TCP/IPv6, Unix domain sockets or [custom protocols](https://godoc.org/github.com/jslyzt/mysql#DialFunc)
   * Automatic handling of broken connections
   * Automatic Connection Pooling *(by database/sql package)*
   * Supports queries larger than 16MB
@@ -48,7 +48,7 @@ A MySQL-Driver for Go's [database/sql](https://golang.org/pkg/database/sql/) pac
 ## Installation
 Simple install the package to your [$GOPATH](https://github.com/golang/go/wiki/GOPATH "GOPATH") with the [go tool](https://golang.org/cmd/go/ "go command") from shell:
 ```bash
-$ go get -u github.com/go-sql-driver/mysql
+$ go get -u github.com/jslyzt/mysql
 ```
 Make sure [Git is installed](https://git-scm.com/downloads) on your machine and in your system's `PATH`.
 
@@ -58,12 +58,12 @@ _Go MySQL Driver_ is an implementation of Go's `database/sql/driver` interface. 
 Use `mysql` as `driverName` and a valid [DSN](#dsn-data-source-name)  as `dataSourceName`:
 ```go
 import "database/sql"
-import _ "github.com/go-sql-driver/mysql"
+import _ "github.com/jslyzt/mysql"
 
 db, err := sql.Open("mysql", "user:password@/dbname")
 ```
 
-[Examples are available in our Wiki](https://github.com/go-sql-driver/mysql/wiki/Examples "Go-MySQL-Driver Examples").
+[Examples are available in our Wiki](https://github.com/jslyzt/mysql/wiki/Examples "Go-MySQL-Driver Examples").
 
 
 ### DSN (Data Source Name)
@@ -92,7 +92,7 @@ This has the same effect as an empty DSN string:
 
 ```
 
-Alternatively, [Config.FormatDSN](https://godoc.org/github.com/go-sql-driver/mysql#Config.FormatDSN) can be used to create a DSN string by filling a struct.
+Alternatively, [Config.FormatDSN](https://godoc.org/github.com/jslyzt/mysql#Config.FormatDSN) can be used to create a DSN string by filling a struct.
 
 #### Password
 Passwords can consist of any character. Escaping is **not** necessary.
@@ -151,7 +151,7 @@ Type:           bool
 Valid Values:   true, false
 Default:        false
 ```
-`allowOldPasswords=true` allows the usage of the insecure old password method. This should be avoided, but is necessary in some cases. See also [the old_passwords wiki page](https://github.com/go-sql-driver/mysql/wiki/old_passwords).
+`allowOldPasswords=true` allows the usage of the insecure old password method. This should be avoided, but is necessary in some cases. See also [the old_passwords wiki page](https://github.com/jslyzt/mysql/wiki/old_passwords).
 
 ##### `charset`
 
@@ -318,7 +318,7 @@ Valid Values:   true, false, skip-verify, <name>
 Default:        false
 ```
 
-`tls=true` enables TLS / SSL encrypted connection to the server. Use `skip-verify` if you want to use a self-signed or invalid certificate (server side). Use a custom value registered with [`mysql.RegisterTLSConfig`](https://godoc.org/github.com/go-sql-driver/mysql#RegisterTLSConfig).
+`tls=true` enables TLS / SSL encrypted connection to the server. Use `skip-verify` if you want to use a self-signed or invalid certificate (server side). Use a custom value registered with [`mysql.RegisterTLSConfig`](https://godoc.org/github.com/jslyzt/mysql#RegisterTLSConfig).
 
 
 ##### `writeTimeout`
@@ -417,14 +417,14 @@ See [context support in the database/sql package](https://golang.org/doc/go1.8#d
 ### `LOAD DATA LOCAL INFILE` support
 For this feature you need direct access to the package. Therefore you must change the import path (no `_`):
 ```go
-import "github.com/go-sql-driver/mysql"
+import "github.com/jslyzt/mysql"
 ```
 
 Files must be whitelisted by registering them with `mysql.RegisterLocalFile(filepath)` (recommended) or the Whitelist check must be deactivated by using the DSN parameter `allowAllFiles=true` ([*Might be insecure!*](http://dev.mysql.com/doc/refman/5.7/en/load-data-local.html)).
 
 To use a `io.Reader` a handler function must be registered with `mysql.RegisterReaderHandler(name, handler)` which returns a `io.Reader` or `io.ReadCloser`. The Reader is available with the filepath `Reader::<name>` then. Choose different names for different handlers and `DeregisterReaderHandler` when you don't need it anymore.
 
-See the [godoc of Go-MySQL-Driver](https://godoc.org/github.com/go-sql-driver/mysql "golang mysql driver documentation") for details.
+See the [godoc of Go-MySQL-Driver](https://godoc.org/github.com/jslyzt/mysql "golang mysql driver documentation") for details.
 
 
 ### `time.Time` support
@@ -432,9 +432,9 @@ The default internal output type of MySQL `DATE` and `DATETIME` values is `[]byt
 
 However, many want to scan MySQL `DATE` and `DATETIME` values into `time.Time` variables, which is the logical opposite in Go to `DATE` and `DATETIME` in MySQL. You can do that by changing the internal output type from `[]byte` to `time.Time` with the DSN parameter `parseTime=true`. You can set the default [`time.Time` location](https://golang.org/pkg/time/#Location) with the `loc` DSN parameter.
 
-**Caution:** As of Go 1.1, this makes `time.Time` the only variable type you can scan `DATE` and `DATETIME` values into. This breaks for example [`sql.RawBytes` support](https://github.com/go-sql-driver/mysql/wiki/Examples#rawbytes).
+**Caution:** As of Go 1.1, this makes `time.Time` the only variable type you can scan `DATE` and `DATETIME` values into. This breaks for example [`sql.RawBytes` support](https://github.com/jslyzt/mysql/wiki/Examples#rawbytes).
 
-Alternatively you can use the [`NullTime`](https://godoc.org/github.com/go-sql-driver/mysql#NullTime) type as the scan destination, which works with both `time.Time` and `string` / `[]byte`.
+Alternatively you can use the [`NullTime`](https://godoc.org/github.com/jslyzt/mysql#NullTime) type as the scan destination, which works with both `time.Time` and `string` / `[]byte`.
 
 
 ### Unicode support
@@ -447,17 +447,17 @@ Version 1.0 of the driver recommended adding `&charset=utf8` (alias for `SET NAM
 See http://dev.mysql.com/doc/refman/5.7/en/charset-unicode.html for more details on MySQL's Unicode support.
 
 ## Testing / Development
-To run the driver tests you may need to adjust the configuration. See the [Testing Wiki-Page](https://github.com/go-sql-driver/mysql/wiki/Testing "Testing") for details.
+To run the driver tests you may need to adjust the configuration. See the [Testing Wiki-Page](https://github.com/jslyzt/mysql/wiki/Testing "Testing") for details.
 
 Go-MySQL-Driver is not feature-complete yet. Your help is very appreciated.
-If you want to contribute, you can work on an [open issue](https://github.com/go-sql-driver/mysql/issues?state=open) or review a [pull request](https://github.com/go-sql-driver/mysql/pulls).
+If you want to contribute, you can work on an [open issue](https://github.com/jslyzt/mysql/issues?state=open) or review a [pull request](https://github.com/jslyzt/mysql/pulls).
 
-See the [Contribution Guidelines](https://github.com/go-sql-driver/mysql/blob/master/CONTRIBUTING.md) for details.
+See the [Contribution Guidelines](https://github.com/jslyzt/mysql/blob/master/CONTRIBUTING.md) for details.
 
 ---------------------------------------
 
 ## License
-Go-MySQL-Driver is licensed under the [Mozilla Public License Version 2.0](https://raw.github.com/go-sql-driver/mysql/master/LICENSE)
+Go-MySQL-Driver is licensed under the [Mozilla Public License Version 2.0](https://raw.github.com/jslyzt/mysql/master/LICENSE)
 
 Mozilla summarizes the license scope as follows:
 > MPL: The copyleft applies to any files containing MPLed code.
@@ -470,7 +470,7 @@ That means:
 
 Please read the [MPL 2.0 FAQ](https://www.mozilla.org/en-US/MPL/2.0/FAQ/) if you have further questions regarding the license.
 
-You can read the full terms here: [LICENSE](https://raw.github.com/go-sql-driver/mysql/master/LICENSE).
+You can read the full terms here: [LICENSE](https://raw.github.com/jslyzt/mysql/master/LICENSE).
 
-![Go Gopher and MySQL Dolphin](https://raw.github.com/wiki/go-sql-driver/mysql/go-mysql-driver_m.jpg "Golang Gopher transporting the MySQL Dolphin in a wheelbarrow")
+![Go Gopher and MySQL Dolphin](https://raw.github.com/wiki/jslyzt/mysql/go-mysql-driver_m.jpg "Golang Gopher transporting the MySQL Dolphin in a wheelbarrow")
 

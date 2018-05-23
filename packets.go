@@ -658,7 +658,7 @@ func (mc *mysqlConn) handleErrorPacket(data []byte) error {
 	}
 
 	// Error Message [string]
-	return &MySQLError{
+	return &MSQLError{
 		Number:  errno,
 		Message: string(data[pos:]),
 	}
@@ -679,7 +679,7 @@ func (mc *mysqlConn) handleOkPacket(data []byte) error {
 	mc.affectedRows, _, n = readLengthEncodedInteger(data[1:])
 
 	// Insert id [Length Coded Binary]
-	mc.insertId, _, m = readLengthEncodedInteger(data[1+n:])
+	mc.insertID, _, m = readLengthEncodedInteger(data[1+n:])
 
 	// server_status [2 bytes]
 	mc.status = readStatus(data[1+n+m : 1+n+m+2])

@@ -49,7 +49,7 @@ func TestInterpolateParamsTooManyPlaceholders(t *testing.T) {
 }
 
 // We don't support placeholder in string literal for now.
-// https://github.com/go-sql-driver/mysql/pull/490
+// https://github.com/jslyzt/mysql/pull/490
 func TestInterpolateParamsPlaceholderInString(t *testing.T) {
 	mc := &mysqlConn{
 		buf:              newBuffer(nil),

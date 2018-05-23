@@ -31,7 +31,7 @@ type mysqlConn struct {
 	buf              buffer
 	netConn          net.Conn
 	affectedRows     uint64
-	insertId         uint64
+	insertID         uint64
 	cfg              *Config
 	maxAllowedPacket int
 	maxWriteSize     int
@@ -76,7 +76,6 @@ func (mc *mysqlConn) handleParams() (err error) {
 			}
 		}
 	}
-
 	return
 }
 
@@ -87,6 +86,7 @@ func (mc *mysqlConn) markBadConn(err error) error {
 	if err != errBadConnNoWrite {
 		return err
 	}
+	errLog.Print("markBadConn error: ", err)
 	return driver.ErrBadConn
 }
 
@@ -117,9 +117,7 @@ func (mc *mysqlConn) Close() (err error) {
 	if !mc.closed.IsSet() {
 		err = mc.writeCommandPacket(comQuit)
 	}
-
 	mc.cleanup()
-
 	return
 }
 
@@ -147,6 +145,7 @@ func (mc *mysqlConn) error() error {
 		if err := mc.canceled.Value(); err != nil {
 			return err
 		}
+		errLog.Print("mysqlConn error is nil")
 		return ErrInvalidConn
 	}
 	return nil
@@ -175,7 +174,6 @@ func (mc *mysqlConn) Prepare(query string) (driver.Stmt, error) {
 				return nil, err
 			}
 		}
-
 		if columnCount > 0 {
 			err = mc.readUntilEOF()
 		}
@@ -323,13 +321,13 @@ func (mc *mysqlConn) Exec(query string, args []driver.Value) (driver.Result, err
 		query = prepared
 	}
 	mc.affectedRows = 0
-	mc.insertId = 0
+	mc.insertID = 0
 
 	err := mc.exec(query)
 	if err == nil {
 		return &mysqlResult{
 			affectedRows: int64(mc.affectedRows),
-			insertId:     int64(mc.insertId),
+			insertID:     int64(mc.insertID),
 		}, err
 	}
 	return nil, mc.markBadConn(err)

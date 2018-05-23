@@ -54,7 +54,7 @@ var (
 	sDateTime0 = "0000-00-00 00:00:00"
 )
 
-// See https://github.com/go-sql-driver/mysql/wiki/Testing
+// See https://github.com/jslyzt/mysql/wiki/Testing
 func init() {
 	// get environment variables
 	env := func(key, defaultValue string) string {
@@ -178,7 +178,7 @@ func (dbt *DBTest) mustQuery(query string, args ...interface{}) (rows *sql.Rows)
 }
 
 func maybeSkip(t *testing.T, err error, skipErrno uint16) {
-	mySQLErr, ok := err.(*MySQLError)
+	mySQLErr, ok := err.(*MSQLError)
 	if !ok {
 		return
 	}
@@ -408,7 +408,7 @@ func TestFloat32(t *testing.T) {
 func TestFloat64(t *testing.T) {
 	runTests(t, dsn, func(dbt *DBTest) {
 		types := [2]string{"FLOAT", "DOUBLE"}
-		var expected float64 = 42.23
+		expected := 42.23
 		var out float64
 		var rows *sql.Rows
 		for _, v := range types {
@@ -431,7 +431,7 @@ func TestFloat64(t *testing.T) {
 func TestFloat64Placeholder(t *testing.T) {
 	runTests(t, dsn, func(dbt *DBTest) {
 		types := [2]string{"FLOAT", "DOUBLE"}
-		var expected float64 = 42.23
+		expected := 42.23
 		var out float64
 		var rows *sql.Rows
 		for _, v := range types {
@@ -515,7 +515,7 @@ func TestRawBytes(t *testing.T) {
 			if !bytes.Equal(v2, o2) {
 				dbt.Errorf("expected %v, got %v", v2, o2)
 			}
-			// https://github.com/go-sql-driver/mysql/issues/765
+			// https://github.com/jslyzt/mysql/issues/765
 			// Appending to RawBytes shouldn't overwrite next RawBytes.
 			o1 = append(o1, "xyzzy"...)
 			if !bytes.Equal(v2, o2) {
@@ -1322,7 +1322,7 @@ func TestReuseClosedConnection(t *testing.T) {
 		t.Skipf("MySQL server not running on %s", netAddr)
 	}
 
-	md := &MySQLDriver{}
+	md := &MSQLDriver{}
 	conn, err := md.Open(dsn)
 	if err != nil {
 		t.Fatalf("error connecting: %s", err.Error())

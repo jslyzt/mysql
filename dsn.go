@@ -99,6 +99,8 @@ func (cfg *Config) normalize() error {
 			host, _, err := net.SplitHostPort(cfg.Addr)
 			if err == nil {
 				cfg.tls.ServerName = host
+			} else {
+				return err
 			}
 		}
 	}
@@ -347,7 +349,6 @@ func ParseDSN(dsn string) (cfg *Config, err error) {
 							}
 						}
 						cfg.User = dsn[:k]
-
 						break
 					}
 				}
@@ -381,7 +382,6 @@ func ParseDSN(dsn string) (cfg *Config, err error) {
 				}
 			}
 			cfg.DBName = dsn[i+1 : j]
-
 			break
 		}
 	}
@@ -474,11 +474,11 @@ func parseDSNParams(cfg *Config, params string) (err error) {
 		// Time Location
 		case "loc":
 			if value, err = url.QueryUnescape(value); err != nil {
-				return
+				return err
 			}
 			cfg.Loc, err = time.LoadLocation(value)
 			if err != nil {
-				return
+				return err
 			}
 
 		// multiple statements in one query
@@ -501,7 +501,7 @@ func parseDSNParams(cfg *Config, params string) (err error) {
 		case "readTimeout":
 			cfg.ReadTimeout, err = time.ParseDuration(value)
 			if err != nil {
-				return
+				return err
 			}
 
 		// Reject read-only connections
@@ -514,13 +514,13 @@ func parseDSNParams(cfg *Config, params string) (err error) {
 
 		// Strict mode
 		case "strict":
-			panic("strict mode has been removed. See https://github.com/go-sql-driver/mysql/wiki/strict-mode")
+			panic("strict mode has been removed. See https://github.com/jslyzt/mysql/wiki/strict-mode")
 
 		// Dial Timeout
 		case "timeout":
 			cfg.Timeout, err = time.ParseDuration(value)
 			if err != nil {
-				return
+				return err
 			}
 
 		// TLS-Encryption
@@ -554,12 +554,12 @@ func parseDSNParams(cfg *Config, params string) (err error) {
 		case "writeTimeout":
 			cfg.WriteTimeout, err = time.ParseDuration(value)
 			if err != nil {
-				return
+				return err
 			}
 		case "maxAllowedPacket":
 			cfg.MaxAllowedPacket, err = strconv.Atoi(value)
 			if err != nil {
-				return
+				return err
 			}
 		default:
 			// lazy init
@@ -568,7 +568,7 @@ func parseDSNParams(cfg *Config, params string) (err error) {
 			}
 
 			if cfg.Params[param[0]], err = url.QueryUnescape(value); err != nil {
-				return
+				return err
 			}
 		}
 	}
